@@ -39,6 +39,7 @@ def move_player(key):
     if key[pygame.K_d]:
         player.flip = False
         dx += cfg.SPEED1
+
     if key[pygame.K_q]:
         pygame.quit()
 
