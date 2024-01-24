@@ -1,6 +1,7 @@
 import pygame
 from config import Config
 from player import Player
+from weapon import Weapon
 
 pygame.init()
 cfg = Config()
@@ -9,11 +10,16 @@ pygame.display.set_caption(cfg.GAME_NAME)
 
 clock = pygame.time.Clock()
 
-cfg.build_animations_list(
-    "elf-m", "elf-f", "dwarf-m", "dwarf-f", "doc", "goblin", "chort"
-)
-player_imgs = cfg.get_images("goblin")
-player = Player(100, 100, player_imgs)
+cfg.build_animations_list(cfg.player_list)
+cfg.build_animations_list(cfg.mob_list)
+cfg.build_animations_list(cfg.weapon_list)
+
+player_imgs = cfg.get_images("elf-m")
+weapon_imgs = cfg.get_images("bow")
+ammo_img = cfg.get_images("arrow")
+
+player = Player(100, 100, player_imgs, cfg.IMG_AJUSTMENT["elf-m"])
+bow = Weapon(weapon_imgs)
 
 
 def move_player(key):
@@ -40,6 +46,8 @@ def move_player(key):
     player.move(dx, dy)
     player.update()
     player.draw(screen)
+    bow.update(player)
+    bow.draw(screen)
 
 
 def main():

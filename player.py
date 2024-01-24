@@ -6,8 +6,9 @@ cfg = Config()
 
 
 class Player:
-    def __init__(self, x, y, img_list):
+    def __init__(self, x, y, img_list, offset=None):
         self.flip = False
+        self.offset = offset
         self.frame_idx = 0
         self.update_time = pygame.time.get_ticks()
         self.rect = pygame.Rect(0, 0, 40, 40)
@@ -33,5 +34,11 @@ class Player:
 
     def draw(self, screen):
         flipped_image = pygame.transform.flip(self.image, self.flip, False)
-        screen.blit(flipped_image, self.rect)
+        if self.offset:
+            screen.blit(
+                flipped_image,
+                (self.rect.x, self.rect.y - cfg.SCALE_CHARACTER * self.offset),
+            )
+        else:
+            screen.blit(flipped_image, self.rect)
         pygame.draw.rect(screen, cfg.COLORS["RED"], self.rect, 1)
