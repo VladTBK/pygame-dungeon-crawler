@@ -19,7 +19,9 @@ weapon_imgs = cfg.get_images("bow")
 ammo_img = cfg.get_images("arrow")
 
 player = Player(100, 100, player_imgs, cfg.IMG_AJUSTMENT["elf-m"])
-bow = Weapon(weapon_imgs)
+bow = Weapon(weapon_imgs, ammo_img)
+
+arrow_group = pygame.sprite.Group()
 
 
 def move_player(key):
@@ -46,8 +48,13 @@ def move_player(key):
     player.move(dx, dy)
     player.update()
     player.draw(screen)
-    bow.update(player)
+    arrow = bow.update(player)
+    if arrow:
+        arrow_group.add(arrow)
+    print(arrow_group)
     bow.draw(screen)
+    for arrow in arrow_group:
+        arrow.draw(screen)
 
 
 def main():
