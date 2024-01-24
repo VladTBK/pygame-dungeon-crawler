@@ -9,15 +9,18 @@ pygame.display.set_caption(cfg.GAME_NAME)
 
 clock = pygame.time.Clock()
 
-player_idle_imgs = cfg.load_imgs(cfg.PLAYER_MALE_ELF_IDLE_PATH)
-player = Player(100, 100, player_idle_imgs[0])
+cfg.build_animations_list(
+    "elf-m", "elf-f", "dwarf-m", "dwarf-f", "doc", "goblin", "chort"
+)
+player_imgs = cfg.get_images("goblin")
+player = Player(100, 100, player_imgs)
 
 
 def move_player(key):
     screen.fill(cfg.COLORS["BG"])
     dx = 0
     dy = 0
-
+    player.state = "idle"
     if key[pygame.K_w]:
         dy -= cfg.SPEED1
     if key[pygame.K_s]:
@@ -31,7 +34,12 @@ def move_player(key):
     if key[pygame.K_q]:
         pygame.quit()
 
+    if dx != 0 or dy != 0:
+        player.state = "run"
+
     player.move(dx, dy)
+    player.update()
+    player.draw(screen)
 
 
 def main():
@@ -40,7 +48,6 @@ def main():
         clock.tick(cfg.FPS)
         curr_key = pygame.key.get_pressed()
         move_player(curr_key)
-        player.draw(screen)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
