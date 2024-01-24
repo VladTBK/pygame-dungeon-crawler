@@ -1,16 +1,16 @@
 import pygame
-from config import Config as cfg
+from config import Config
 from player import Player
 
 pygame.init()
-
+cfg = Config()
 screen = pygame.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
 pygame.display.set_caption(cfg.GAME_NAME)
 
 clock = pygame.time.Clock()
 
-move_up, move_down, move_right, move_left = False, False, False, False
-player = Player(100, 100)
+player_idle_imgs = cfg.load_imgs(cfg.PLAYER_MALE_ELF_IDLE_PATH)
+player = Player(100, 100, player_idle_imgs[0])
 
 
 def move_player(key):
@@ -23,9 +23,13 @@ def move_player(key):
     if key[pygame.K_s]:
         dy += cfg.SPEED1
     if key[pygame.K_a]:
+        player.flip = True
         dx -= cfg.SPEED1
     if key[pygame.K_d]:
+        player.flip = False
         dx += cfg.SPEED1
+    if key[pygame.K_q]:
+        pygame.quit()
 
     player.move(dx, dy)
 
